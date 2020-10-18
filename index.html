@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Where Am I</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body style="font-family: 'Space Mono', monospace">
+    <div class="container" style="padding: 10px">
+      <img
+        src="images/logo.svg"
+        class="img-fluid logo"
+        alt="Responsive Image"
+      />
+      <div class="card info-card">
+        <div class="card-body">
+          <p class="card-text">
+            SELECT A COUNTRY AND TRAVEL TO IT'S DAILY TRENDS. BE AWARE THAT THE
+            NUMBER OF TRENDS MAY VARY DUE TO GOOGLES'S KEYWORDS REGISTER OF EACH
+            COUNTRY.
+          </p>
+          <p class="card-text text-painted">
+            <i>WHERE AM I</i> WILL OPEN A NEW TAB IN YOUR BROWSER,
+            <u>MAKE SURE TO ALLOW POP-UPS</u>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label for="countries" class="label">CHOOSE YOUR DESTINATION:</label>
+          <div class="card destination-card">
+            <div class="card-body destination-card-body">
+              <img
+                src="images/globe.svg"
+                class="img-fluid globe"
+                alt="Responsive Image"
+              />
+              <select class="form-control countries-select" id="countries">
+                <option value="null" class="country-text">
+                  Select a Country
+                </option>
+              </select>
+              <!-- <div class="dropdown countries_dropdown">
+                      <button class="btn dropdown-toggle" type="button" title="Select Country" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                      <div id="countries" class="dropdown-menu" aria-labelledby="country_dropdown"></div>
+                    </div> -->
+              <p class="country-text"><strong>OR</strong></p>
+              <button
+                id="randomB"
+                onclick="selectR();"
+                type="button"
+                class="btn derive-btn"
+              >
+                <strong>DERIVE</strong>
+              </button>
+            </div>
+          </div>
+          <button
+            id="but"
+            onclick="getData();"
+            type="button"
+            class="btn run-btn"
+          >
+            <strong>RUN</strong>
+          </button>
+          <button
+                id="stop"
+                onclick="call_stopper();"
+                type="button"
+                class="btn stop-btn"
+              >
+                <strong>STOP</strong>
+          </button>
+          <input id="all_in" type="checkbox" name="" style="display: none";/>
+        </div>
+      </div>
+
+      <div id="loading-image" style=" position: absolute; display: none" class="gif-animation">
+        <img src="images/loading.gif" class="loading-gif" />
+      </div>
+      <p id="time1"></p>
+        <div class="wrapper">
+          <p class="table-title">WHAT HAS BEEN GOING ON WHERE YOU TRAVELED TO?</p>
+          <table id="data" class="table results-table">
+            <thead class="thead-search">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Keyword</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+    </div>
+
+    
+      <div class="web-footer">
+        <p class="links">Conception: <a class="name-link" href="https://mathevssa.com/" target="_blank">Matheus Sá</a>, <a class="name-link" href="#">João Miguel Queiroz</a>, <a class="name-link" href="#">Arlindo Christiam</a>, <a class="name-link" href="http://www.rodrigomaceira.com/" target="_blank">Rodrigo Maceira</a></p>
+        <p class="links">Lead-Developer: <a class="name-link" href="https://github.com/Cesar-mlw" target="_blank">Cesar Moura Leite Westphal</a></p>
+        <p class="links">Developer: <a class="name-link" href="#">Awais Arshad</a></p>
+      </div>
+      <div class="toast cookie-toast" id="cookiet" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="4000">
+        <button type="button" class="ml-2 mb-1 mr-2 close-btn" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true" close><strong>OK</strong></span>
+        </button>
+        <div class="toast-body cookie-toast-body">
+          THIS WEBSITE <u>DOES NOT</u> USE COOKIES. FROM NOWHERE.
+        </div>
+      </div>
+      
+      <div class="toast error-toast" id="errort" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+        <button type="button" class="ml-2 mb-1 mr-2 close-btn" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true" close><strong>OK</strong></span>
+        </button>
+        <div class="toast-body error-toast-body">
+          PLEASE SELECT A COUNTRY ABOVE.
+        </div>
+      </div>
+  </body>
+</html>
+<script type="text/javascript">
+  $(document).ready(() => {
+    $('#cookiet').toast('show')
+    $('#errort').style.display = "none"
+  })
+
+
+
+  var tminutes = "0:20"; //3 minutes
+  var t = toSeconds(tminutes);
+
+  //   document.getElementById('time1').innerText = "Current wait time is "+tminutes +" ("+t+" seconds ) "
+
+  // message
+  var query_count = 0;
+  var googleurl = "";
+  var json = {
+    AR: "Argentina",
+    AU: "Australia",
+    BE: "Belgium",
+    BR: "Brazil",
+    CZ: "Czech Republic",
+    EG: "Egypt",
+    FI: "Finland",
+    FR: "France",
+    DE: "Germany",
+    GR: "Greece",
+    HK: "Hong Kong",
+    HU: "Hungary",
+    IN: "India",
+    ID: "Indonesia",
+    IE: "Ireland",
+    IL: "Israel",
+    IT: "Italy",
+    JP: "Japan",
+    KE: "Kenya",
+    MY: "Malaysia",
+    MX: "Mexico",
+    NL: "Netherlands",
+    NZ: "New Zealand",
+    NG: "Nigeria",
+    NO: "Norway",
+    PH: "Philippines",
+    PL: "Poland",
+    PT: "Portugal",
+    RO: "Romania",
+    RU: "Russia",
+    SA: "Saudi Arabia",
+    SG: "Singapore",
+    ZA: "South Africa",
+    KR: "South Korea",
+    SE: "Sweden",
+    CH: "Switzerland",
+    TW: "Taiwan",
+    TH: "Thailand",
+    TR: "Turkey",
+    UA: "Ukraine",
+    GB: "United Kingdom",
+    US: "United States",
+    VN: "Vietnam",
+  };
+
+  var local_google = [
+    {
+      Country: "Afghanistan",
+      URL: "www.google.com.af/",
+    },
+    {
+      Country: "Albania",
+      URL: "www.google.al/",
+    },
+    {
+      Country: "Algeria",
+      URL: "www.google.dz/",
+    },
+    {
+      Country: "American Samoa",
+      URL: "www.google.as/",
+    },
+    {
+      Country: "Andorra",
+      URL: "www.google.ad/",
+    },
+    {
+      Country: "Angola",
+      URL: "www.google.it.ao/",
+    },
+    {
+      Country: "Anguila",
+      URL: "www.google.com.ai/",
+    },
+    {
+      Country: "Antigua & Barbuda",
+      URL: "www.google.com.ag/",
+    },
+    {
+      Country: "Argentina",
+      URL: "www.google.com.ar/",
+    },
+    {
+      Country: "Armenia",
+      URL: "www.google.am/",
+    },
+    {
+      Country: "Ascension Island",
+      URL: "www.google.ac/",
+    },
+    {
+      Country: "Australia",
+      URL: "www.google.com.au/",
+    },
+    {
+      Country: "Austria",
+      URL: "www.google.at/",
+    },
+    {
+      Country: "Azerbaijan",
+      URL: "www.google.az/",
+    },
+    {
+      Country: "Bahamas",
+      URL: "www.google.bs/",
+    },
+    {
+      Country: "Bahrain",
+      URL: "www.google.com.bh/",
+    },
+    {
+      Country: "Bangladesh",
+      URL: "www.google.com.bd/",
+    },
+    {
+      Country: "Belarus",
+      URL: "www.google.com.by/",
+    },
+    {
+      Country: "Belgium",
+      URL: "www.google.be/",
+    },
+    {
+      Country: "Belize",
+      URL: "www.google.com.bz/",
+    },
+    {
+      Country: "Benin",
+      URL: "www.google.bj/",
+    },
+    {
+      Country: "Bhutan",
+      URL: "www.google.bt/",
+    },
+    {
+      Country: "Bolivia",
+      URL: "www.google.com.bo/",
+    },
+    {
+      Country: "Bosnia & Herzegovinia",
+      URL: "www.google.ba/",
+    },
+    {
+      Country: "Botswana",
+      URL: "www.google.co.bw/",
+    },
+    {
+      Country: "Brazil",
+      URL: "www.google.com.br/",
+    },
+    {
+      Country: "British Virgin Islands",
+      URL: "www.google.vg/",
+    },
+    {
+      Country: "Brunei",
+      URL: "www.google.com.bn/",
+    },
+    {
+      Country: "Bulgaria",
+      URL: "www.google.bg/",
+    },
+    {
+      Country: "Burkina Faso",
+      URL: "www.google.bf/",
+    },
+    {
+      Country: "Burundi",
+      URL: "www.google.bi/",
+    },
+    {
+      Country: "Cambodia",
+      URL: "www.google.com.kh/",
+    },
+    {
+      Country: "Cameroon",
+      URL: "www.google.cm/",
+    },
+    {
+      Country: "Canada",
+      URL: "www.google.ca/",
+    },
+    {
+      Country: "Cape Verde",
+      URL: "www.google.cv/",
+    },
+    {
+      Country: "Catalan Countries",
+      URL: "www.google.cat/",
+    },
+    {
+      Country: "Central African Republic",
+      URL: "www.google.cf/",
+    },
+    {
+      Country: "Chad",
+      URL: "www.google.td/",
+    },
+    {
+      Country: "Chile",
+      URL: "www.google.cl/",
+    },
+    {
+      Country: "China",
+      URL: "www.google.cn/",
+    },
+    {
+      Country: "Columbia",
+      URL: "www.google.com.co/",
+    },
+    {
+      Country: "Congo, Democratic Republic",
+      URL: "www.google.cd/",
+    },
+    {
+      Country: "Congo",
+      URL: "www.google.cg/",
+    },
+    {
+      Country: "Cook Islands",
+      URL: "www.google.co.ck/",
+    },
+    {
+      Country: "Costa Rica",
+      URL: "www.google.co.cr/",
+    },
+    {
+      Country: "C么te d'Ivoire",
+      URL: "www.google.ci/",
+    },
+    {
+      Country: "Croatia",
+      URL: "www.google.hr/",
+    },
+    {
+      Country: "Cuba",
+      URL: "www.google.com.cu/",
+    },
+    {
+      Country: "Cyprus",
+      URL: "www.google.com.cy/",
+    },
+    {
+      Country: "Czech Republic",
+      URL: "www.google.cz/",
+    },
+    {
+      Country: "Denmark",
+      URL: "www.google.dk/",
+    },
+    {
+      Country: "Djibouti",
+      URL: "www.google.dj/",
+    },
+    {
+      Country: "Dominica",
+      URL: "www.google.dm/",
+    },
+    {
+      Country: "Dominican Republic",
+      URL: "www.google.com.do/",
+    },
+    {
+      Country: "Ecuador",
+      URL: "www.google.com.ec/",
+    },
+    {
+      Country: "Egypt",
+      URL: "www.google.com.eg/",
+    },
+    {
+      Country: "El Salvador",
+      URL: "www.google.com.sv/",
+    },
+    {
+      Country: "Estonia",
+      URL: "www.google.ee/",
+    },
+    {
+      Country: "Ethiopia",
+      URL: "www.google.com.et/",
+    },
+    {
+      Country: "Fiji",
+      URL: "www.google.com.fj/",
+    },
+    {
+      Country: "Finland",
+      URL: "www.google.fi/",
+    },
+    {
+      Country: "France",
+      URL: "www.google.fr/",
+    },
+    {
+      Country: "Gabon",
+      URL: "www.google.ga/",
+    },
+    {
+      Country: "Gambia",
+      URL: "www.google.gm/",
+    },
+    {
+      Country: "Georgia",
+      URL: "www.google.ge/",
+    },
+    {
+      Country: "Germany",
+      URL: "www.google.de/",
+    },
+    {
+      Country: "Ghana",
+      URL: "www.google.com.gh/",
+    },
+    {
+      Country: "Gibraltar",
+      URL: "www.google.com.gi/",
+    },
+    {
+      Country: "Greece",
+      URL: "www.google.gr/",
+    },
+    {
+      Country: "Greenland",
+      URL: "www.google.gl/",
+    },
+    {
+      Country: "Guadeloupe",
+      URL: "www.google.gp/",
+    },
+    {
+      Country: "Guatemala",
+      URL: "www.google.com.gt/",
+    },
+    {
+      Country: "Guernsey",
+      URL: "www.google.gg/",
+    },
+    {
+      Country: "Guyana",
+      URL: "www.google.gy/",
+    },
+    {
+      Country: "Haiti",
+      URL: "www.google.ht/",
+    },
+    {
+      Country: "Honduras",
+      URL: "www.google.hn/",
+    },
+    {
+      Country: "Hong Kong",
+      URL: "www.google.com.hk/",
+    },
+    {
+      Country: "Hungary",
+      URL: "www.google.hu/",
+    },
+    {
+      Country: "Iceland",
+      URL: "www.google.is/",
+    },
+    {
+      Country: "India",
+      URL: "www.google.co.in/",
+    },
+    {
+      Country: "Indonesia",
+      URL: "www.google.co.id/",
+    },
+    {
+      Country: "Iraq",
+      URL: "www.google.iw/",
+    },
+    {
+      Country: "Ireland",
+      URL: "www.google.ie/",
+    },
+    {
+      Country: "Isle of Man",
+      URL: "www.google.co.im/",
+    },
+    {
+      Country: "Israel",
+      URL: "www.google.co.il/",
+    },
+    {
+      Country: "Italy",
+      URL: "www.google.it/",
+    },
+    {
+      Country: "Ivory Coast",
+      URL: "www.google.ci/",
+    },
+    {
+      Country: "Jamaica",
+      URL: "www.google.com.jm/",
+    },
+    {
+      Country: "Japan",
+      URL: "www.google.co.jp/",
+    },
+    {
+      Country: "Jersey",
+      URL: "www.google.co.je/",
+    },
+    {
+      Country: "Jordon",
+      URL: "www.google.jo/",
+    },
+    {
+      Country: "Kazakhstan",
+      URL: "www.google.kz/",
+    },
+    {
+      Country: "Kenya",
+      URL: "www.google.co.ke/",
+    },
+    {
+      Country: "Kiribati",
+      URL: "www.google.ki/",
+    },
+    {
+      Country: "Kuwait",
+      URL: "www.google.com.kw/",
+    },
+    {
+      Country: "Kyrgyzstan",
+      URL: "www.google.com.kg/",
+    },
+    {
+      Country: "Laos",
+      URL: "www.google.la/",
+    },
+    {
+      Country: "Latvia",
+      URL: "www.google.lv/",
+    },
+    {
+      Country: "Lebanon",
+      URL: "www.google.com.lb/",
+    },
+    {
+      Country: "Lesotho",
+      URL: "www.google.co.ls/",
+    },
+    {
+      Country: "Libya",
+      URL: "www.google.com.ly/",
+    },
+    {
+      Country: "Liechtenstein",
+      URL: "www.google.li/",
+    },
+    {
+      Country: "Lithuania",
+      URL: "www.google.lt/",
+    },
+    {
+      Country: "Luxembourg",
+      URL: "www.google.lu/",
+    },
+    {
+      Country: "Macedonia",
+      URL: "www.google.mk/",
+    },
+    {
+      Country: "Madagascar",
+      URL: "www.google.mg/",
+    },
+    {
+      Country: "Malawi",
+      URL: "www.google.mw/",
+    },
+    {
+      Country: "Malaysia",
+      URL: "www.google.com.my/",
+    },
+    {
+      Country: "Maldives",
+      URL: "www.google.mv/",
+    },
+    {
+      Country: "Mali",
+      URL: "www.google.ml/",
+    },
+    {
+      Country: "Malta",
+      URL: "www.google.com.mt/",
+    },
+    {
+      Country: "Mauritius",
+      URL: "www.google.mu/",
+    },
+    {
+      Country: "Mexico",
+      URL: "www.google.com.mx/",
+    },
+    {
+      Country: "Micronesia",
+      URL: "www.google.fm/",
+    },
+    {
+      Country: "Moldavia",
+      URL: "www.google.md/",
+    },
+    {
+      Country: "Mongolia",
+      URL: "www.google.mn/",
+    },
+    {
+      Country: "Montenegro",
+      URL: "www.google.me/",
+    },
+    {
+      Country: "Montserrat",
+      URL: "www.google.ms/",
+    },
+    {
+      Country: "Morocco",
+      URL: "www.google.co.ma/",
+    },
+    {
+      Country: "Mozambique",
+      URL: "www.google.co.mz/",
+    },
+    {
+      Country: "Namibia",
+      URL: "www.google.com.na/",
+    },
+    {
+      Country: "Nauru",
+      URL: "www.google.nr/",
+    },
+    {
+      Country: "Nepal",
+      URL: "www.google.com.np/",
+    },
+    {
+      Country: "Netherlands",
+      URL: "www.google.nl/",
+    },
+    {
+      Country: "New Zealand",
+      URL: "www.google.co.nz/",
+    },
+    {
+      Country: "Nicaragua",
+      URL: "www.google.com.ni/",
+    },
+    {
+      Country: "Niger",
+      URL: "www.google.ne/",
+    },
+    {
+      Country: "Nigeria",
+      URL: "www.google.com.ng/",
+    },
+    {
+      Country: "Niue",
+      URL: "www.google.nu/",
+    },
+    {
+      Country: "Norfolk Island",
+      URL: "www.google.com.nf/",
+    },
+    {
+      Country: "Norway",
+      URL: "www.google.no/",
+    },
+    {
+      Country: "Oman",
+      URL: "www.google.com.om/",
+    },
+    {
+      Country: "Pakistan",
+      URL: "www.google.com.pk/",
+    },
+    {
+      Country: "Palestine",
+      URL: "www.google.ps/",
+    },
+    {
+      Country: "Panama",
+      URL: "www.google.com.pa/",
+    },
+    {
+      Country: "Papua New Guina",
+      URL: "www.google.com.pg/",
+    },
+    {
+      Country: "Paraguay",
+      URL: "www.google.com.py/",
+    },
+    {
+      Country: "Peru",
+      URL: "www.google.com.pe/",
+    },
+    {
+      Country: "Philippines",
+      URL: "www.google.com.ph/",
+    },
+    {
+      Country: "Pitcairn",
+      URL: "www.google.pn/",
+    },
+    {
+      Country: "Poland",
+      URL: "www.google.pl/",
+    },
+    {
+      Country: "Portugal",
+      URL: "www.google.pt/",
+    },
+    {
+      Country: "Puerto Rico",
+      URL: "www.google.com.pr/",
+    },
+    {
+      Country: "Quatar",
+      URL: "www.google.com.qa/",
+    },
+    {
+      Country: "Romania",
+      URL: "www.google.ro/",
+    },
+    {
+      Country: "Russia",
+      URL: "www.google.ru/",
+    },
+    {
+      Country: "Rwanda",
+      URL: "www.google.rw/",
+    },
+    {
+      Country: "Saint Helena",
+      URL: "www.google.sh/",
+    },
+    {
+      Country: "Samoa",
+      URL: "www.google.ws/",
+    },
+    {
+      Country: "San Marino",
+      URL: "www.google.sm/",
+    },
+    {
+      Country: "Sao Tome and Principe",
+      URL: "www.google.st/",
+    },
+    {
+      Country: "Saudia Arabia",
+      URL: "www.google.com.sa/",
+    },
+    {
+      Country: "Senegal",
+      URL: "www.google.sn/",
+    },
+    {
+      Country: "Serbia",
+      URL: "www.google.rs/",
+    },
+    {
+      Country: "Seychelles",
+      URL: "www.google.sc/",
+    },
+    {
+      Country: "Sierra Leone",
+      URL: "www.google.com.sl/",
+    },
+    {
+      Country: "Singapore",
+      URL: "www.google.com.sg/",
+    },
+    {
+      Country: "Slovakia",
+      URL: "www.google.sk/",
+    },
+    {
+      Country: "Slovenia",
+      URL: "www.google.si/",
+    },
+    {
+      Country: "Solomon Islands",
+      URL: "www.google.com.sb/",
+    },
+    {
+      Country: "Somalia",
+      URL: "www.google.so/",
+    },
+    {
+      Country: "South Africa",
+      URL: "www.google.co.za/",
+    },
+    {
+      Country: "South Korea",
+      URL: "www.google.co.kr/",
+    },
+    {
+      Country: "Spain",
+      URL: "www.google.es/",
+    },
+    {
+      Country: "Sri Lanka",
+      URL: "www.google.lk/",
+    },
+    {
+      Country: "St Vincent & Grenadines",
+      URL: "www.google.com.vc/",
+    },
+    {
+      Country: "Suriname",
+      URL: "www.google.sr/",
+    },
+    {
+      Country: "Sweden",
+      URL: "www.google.se/",
+    },
+    {
+      Country: "Switzerland",
+      URL: "www.google.ch/",
+    },
+    {
+      Country: "Taiwan",
+      URL: "www.google.com.tw/",
+    },
+    {
+      Country: "Tajikistan",
+      URL: "www.google.com.tj/",
+    },
+    {
+      Country: "Tanzania",
+      URL: "www.google.co.tz/",
+    },
+    {
+      Country: "Thailand",
+      URL: "www.google.co.th/",
+    },
+    {
+      Country: "Timor-Leste",
+      URL: "www.google.tl/",
+    },
+    {
+      Country: "Togo",
+      URL: "www.google.tg/",
+    },
+    {
+      Country: "Tokelau",
+      URL: "www.google.tk/",
+    },
+    {
+      Country: "Tonga",
+      URL: "www.google.to/",
+    },
+    {
+      Country: "Trinidad & Tobago",
+      URL: "www.google.tt/",
+    },
+    {
+      Country: "Tunisia",
+      URL: "www.google.tn/",
+    },
+    {
+      Country: "Turkey",
+      URL: "www.google.com.tr/",
+    },
+    {
+      Country: "Turkmenistan",
+      URL: "www.google.tm/",
+    },
+    {
+      Country: "Uganda",
+      URL: "www.google.co.ug/",
+    },
+    {
+      Country: "Ukraine",
+      URL: "www.google.com.ua/",
+    },
+    {
+      Country: "United Arab Emirates",
+      URL: "www.google.ae/",
+    },
+    {
+      Country: "United Kingdom",
+      URL: "www.google.co.uk/",
+    },
+    {
+      Country: "United States",
+      URL: "www.google.com/",
+    },
+    {
+      Country: "Uruguay",
+      URL: "www.google.com.uy/",
+    },
+    {
+      Country: "Uzbekistan",
+      URL: "www.google.co.uz/",
+    },
+    {
+      Country: "Vanuatu",
+      URL: "www.google.vu/",
+    },
+    {
+      Country: "Venezuela",
+      URL: "www.google.co.ve/",
+    },
+    {
+      Country: "Vietnam",
+      URL: "www.google.com.vn/",
+    },
+    {
+      Country: "Virgin Islands (US)",
+      URL: "www.google.co.vi/",
+    },
+    {
+      Country: "Zambia",
+      URL: "www.google.co.zm/",
+    },
+    {
+      Country: "Zimbabwe",
+      URL: "www.google.co.zw/",
+    },
+  ];
+
+  var myObj = "";
+  var myObj2 = "";
+  var dictionary = {};
+
+  for (x in json) {
+    $("#countries").append(
+      "<option value='" + x + "'>" + json[x] + "</button>"
+    );
+  }
+
+  function getData() {
+    var countryName = $("#countries").val();
+
+    var xmlhttp = new XMLHttpRequest();
+
+    $("#loading-image").show();
+
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        // alert(this.responseText);
+        myObj = this.responseText.split(",");
+        myObj2 = myObj.slice();
+        myObj.pop();
+        var tableRef = document
+          .getElementById("data")
+          .getElementsByTagName("tbody")[0];
+
+        // alert(myObj);
+        $("#loading-image").hide();
+
+        var i = 1;
+
+        // console.log(myObj);
+
+        if (myObj.length == 0) {
+          console.log("toast")
+          $('.error-toast').toast('show')
+        }
+
+        for (x in myObj) {
+          if (myObj[x] == "Decoding failed: Syntax error") {
+            alert("No record found");
+          } else if (myObj[x] != "") {
+            if (i == 1) {
+              // document.getElementById("start").style.display = "block";
+
+              document.getElementById("but").style.display = "none";
+
+              $("#data tbody tr").remove();
+            }
+
+            // // Insert a row in the table at the last row
+            // var newRow   = tableRef.insertRow();
+
+            // // Insert a cell in the row at index 0
+            // var newCell  = newRow.insertCell(0);
+
+            // var newText  = document.createTextNode(i );
+
+            // newCell.appendChild(newText);
+
+            // i = i +1;
+
+            dictionary[myObj[x]] = 0;
+            // // Insert a cell in the row at index 1
+            // newCell  = newRow.insertCell(1);
+
+            // newText  = document.createTextNode(myObj[x]);
+
+            // newCell.appendChild(newText);
+
+            // // Insert a cell in the row at index 2
+            // newCell  = newRow.insertCell(2);
+
+            // newText  = document.createTextNode(0);
+
+            // newCell.appendChild(newText);
+          }
+        }
+        call_starter();
+      }
+    };
+    xmlhttp.open("GET", "getData.php?q=" + countryName, true);
+    xmlhttp.send();
+  }
+
+  var requestUrl = "http://ip-api.com/json";
+
+  $.ajax({
+    url: requestUrl,
+    type: "GET",
+    success: function (json) {
+      googleurl = "";
+      for (x in local_google) {
+        if (local_google[x]["Country"] == json.country) {
+          googleurl = local_google[x]["URL"];
+        }
+      }
+    },
+    error: function (err) {
+      console.log("Request failed, error= " + err);
+    },
+  });
+
+  function sortTable() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("data");
+    switching = true;
+    /*Make a loop that will continue until
+  no switching has been done:*/
+    while (switching) {
+      //start by saying: no switching is done:
+      switching = false;
+      rows = table.rows;
+      /*Loop through all table rows (except the
+    first, which contains table headers):*/
+      for (i = 1; i < rows.length - 1; i++) {
+        //start by saying there should be no switching:
+        shouldSwitch = false;
+        /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+        x = rows[i].getElementsByTagName("TD")[2];
+        y = rows[i + 1].getElementsByTagName("TD")[2];
+        //check if the two rows should switch place:
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+    rows = table.rows;
+
+    var j = rows.length - 1;
+    console.log(rows.length);
+    for (i = 1; i < rows.length; i++) {
+      //start by saying there should be no switching:
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      rows[i].getElementsByTagName("TD")[0].innerHTML = j;
+      j = j - 1;
+    }
+  }
+
+  function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function setRand() {
+    var randN = getRndInteger(16, 20);
+    console.log(randN);
+    clearInterval(interval);
+
+    interval = setInterval(function () {
+      start_calling();
+    }, randN * 1000);
+  }
+
+  function selectR() {
+    var select = document.getElementById("countries");
+    var items = select.getElementsByTagName("option");
+    var index = Math.floor(Math.random() * items.length);
+
+    select.selectedIndex = index;
+    return false;
+  }
+
+  function start_calling() {
+    if (query_count == 30) {
+      document.getElementById("start").innerHTML = "Start";
+
+      call_stopper();
+      return 0;
+    }
+
+    query_count = query_count + 1;
+    var d = googleurl;
+
+    console.log("size : " + myObj2.length);
+    if (myObj2.length == 1) {
+      call_stopper();
+      return 0;
+    }
+    while (true) {
+      var item = myObj2[Math.floor(Math.random() * myObj2.length)];
+
+      if (item && item.trim()) {
+        break;
+      } else {
+        var index = myObj2.indexOf(item);
+        myObj2.splice(index, 1);
+        console.log("Deleting : " + item);
+      }
+
+      // if(item!="")
+      // {
+      //     break;
+      // }
+    }
+
+    var index = myObj2.indexOf(item);
+    myObj2.splice(index, 1);
+    var query = item;
+
+    var currentTime = new Date();
+
+    dictionary[query] = currentTime.toLocaleTimeString();
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        if (myObj2.length == 0) {
+          myObj2 = [myObj];
+        }
+        var tableRef = document
+          .getElementById("data")
+          .getElementsByTagName("tbody")[0];
+
+        var i = 1;
+
+        var done = [];
+        for (x in myObj) {
+          var n = done.includes(myObj[x]);
+          if (n == true) {
+            console.log("repeat " + myObj[x]);
+            continue;
+          } else {
+            done.push(myObj[x]);
+          }
+
+          if (myObj[x] != "") {
+            if (i == 1) {
+              $("#data tbody tr").remove();
+            }
+
+            if (dictionary[myObj[x]] != 0) {
+              // Insert a row in the table at the last row
+              var newRow = tableRef.insertRow();
+
+              // Insert a cell in the row at index 0
+              var newCell = newRow.insertCell(0);
+
+              var newText = document.createTextNode(i);
+
+
+
+              newCell.appendChild(newText);
+
+              i = i + 1;
+
+              // Insert a cell in the row at index 1
+              newCell = newRow.insertCell(1);
+
+              var link = document.createElement("a");
+              link.href = encodeURI(
+                "https://" + d + "search?query=" + myObj[x]
+              );
+              link.target = "_blank";
+              link.innerText = myObj[x];
+              link.style.color = "#ff005c"
+              newCell.appendChild(link);
+
+              //   // Insert a cell in the row at index 2
+              newCell = newRow.insertCell(2);
+              //   console.log(dictionary);
+
+              //   console.log(dictionary[myObj[x]]);
+              newText = document.createTextNode(dictionary[myObj[x]]);
+              console.log(newText)
+
+              newCell.appendChild(newText);
+            }
+          }
+        }
+
+        sortTable();
+        setRand();
+      }
+    };
+
+    window.open(encodeURI("https://" + d + "search?query=" + query), "_blank");
+    // window.opener.focus();
+
+    // var timer = setInterval(function() {
+    // win.close();
+
+    // }, 16000);
+
+    xmlhttp.open("GET", "call.php?url=" + d + "&query=" + query, true);
+    xmlhttp.send();
+  }
+
+  var interval = "";
+
+  function toSeconds(str) {
+    var pieces = str.split(":");
+    var result = Number(pieces[0]) * 60 + Number(pieces[1]);
+    return result.toFixed(3);
+  }
+
+  function openMultipleTabs(urlsArray) {
+    urlsArray.forEach(function (url) {
+      let link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.click();
+    });
+  }
+
+  function call_starter() {
+    if (document.getElementById("all_in").checked) {
+      var urlsArray = [];
+      var ii = 0;
+      for (x in myObj2) {
+        var item = myObj2[Math.floor(Math.random() * myObj2.length)];
+
+        var d = googleurl;
+        var query = item;
+        var u = "http://" + d + "search?q=" + item;
+        urlsArray.push(u);
+        ii = ii + 1;
+        if (ii == 15) {
+          break;
+        }
+      }
+      openMultipleTabs(urlsArray);
+    } else {
+      // document.getElementById("start").style.display = "none";
+
+      document.getElementById("stop").style.display = "block";
+      // document.getElementById("start").innerHTML = 'Searching ..';
+
+      var randN = getRndInteger(16, 20);
+      start_calling();
+      interval = setInterval(function () {
+        start_calling();
+      }, randN * 1000);
+    }
+  }
+
+  function call_stopper() {
+    // 	document.getElementById("start").style.display = "block";
+
+    document.getElementById("stop").style.display = "none";
+    document.getElementById("but").style.display = "block";
+
+    clearInterval(interval);
+  }
+</script>
