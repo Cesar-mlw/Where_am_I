@@ -79,68 +79,113 @@
             <strong>RUN</strong>
           </button>
           <button
-                id="stop"
-                onclick="call_stopper();"
-                type="button"
-                class="btn stop-btn"
-              >
-                <strong>STOP</strong>
+            id="stop"
+            onclick="call_stopper();"
+            type="button"
+            class="btn stop-btn"
+          >
+            <strong>STOP</strong>
           </button>
-          <input id="all_in" type="checkbox" name="" style="display: none";/>
+          <input id="all_in" type="checkbox" name="" style="display: none" ; />
         </div>
       </div>
 
-      <div id="loading-image" style=" position: absolute; display: none" class="gif-animation">
+      <div
+        id="loading-image"
+        style="position: absolute; display: none"
+        class="gif-animation"
+      >
         <img src="images/loading.gif" class="loading-gif" />
       </div>
       <p id="time1"></p>
-        <div class="wrapper">
-          <p class="table-title">WHAT HAS BEEN GOING ON WHERE YOU TRAVELED TO?</p>
-          <table id="data" class="table results-table">
-            <thead class="thead-search">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Keyword</th>
-                <th scope="col">Time</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+      <div class="wrapper">
+        <p class="table-title">WHAT HAS BEEN GOING ON WHERE YOU TRAVELED TO?</p>
+        <table id="data" class="table results-table">
+          <thead class="thead-search">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Keyword</th>
+              <th scope="col">Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
 
-    
-      <div class="web-footer">
-        <p class="links">Conception: <a class="name-link" href="https://mathevssa.com/" target="_blank">Matheus Sá</a>, <a class="name-link" href="#">João Miguel Queiroz</a>, <a class="name-link" href="#">Arlindo Christiam</a>, <a class="name-link" href="http://www.rodrigomaceira.com/" target="_blank">Rodrigo Maceira</a></p>
-        <p class="links">Lead-Developer: <a class="name-link" href="https://github.com/Cesar-mlw" target="_blank">Cesar Moura Leite Westphal</a></p>
-        <p class="links">Developer: <a class="name-link" href="#">Awais Arshad</a></p>
+    <div class="web-footer">
+      <p class="links">
+        Conception:
+        <a class="name-link" href="https://mathevssa.com/" target="_blank"
+          >Matheus Sá</a
+        >, <a class="name-link" href="#">João Miguel Queiroz</a>,
+        <a class="name-link" href="#">Arlindo Christiam</a>,
+        <a
+          class="name-link"
+          href="http://www.rodrigomaceira.com/"
+          target="_blank"
+          >Rodrigo Maceira</a
+        >
+      </p>
+      <p class="links">
+        Lead-Developer:
+        <a class="name-link" href="https://github.com/Cesar-mlw" target="_blank"
+          >Cesar Moura Leite Westphal</a
+        >
+      </p>
+      <p class="links">
+        Developer: <a class="name-link" href="#">Awais Arshad</a>
+      </p>
+    </div>
+    <div
+      class="toast cookie-toast"
+      id="cookiet"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-autohide="true"
+      data-delay="4000"
+    >
+      <button
+        type="button"
+        class="ml-2 mb-1 mr-2 close-btn"
+        data-dismiss="toast"
+        aria-label="Close"
+      >
+        <span aria-hidden="true" close><strong>OK</strong></span>
+      </button>
+      <div class="toast-body cookie-toast-body">
+        THIS WEBSITE <u>DOES NOT</u> USE COOKIES. FROM NOWHERE.
       </div>
-      <div class="toast cookie-toast" id="cookiet" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="4000">
-        <button type="button" class="ml-2 mb-1 mr-2 close-btn" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true" close><strong>OK</strong></span>
-        </button>
-        <div class="toast-body cookie-toast-body">
-          THIS WEBSITE <u>DOES NOT</u> USE COOKIES. FROM NOWHERE.
-        </div>
+    </div>
+
+    <div
+      class="toast error-toast"
+      id="errort"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-autohide="false"
+    >
+      <button
+        type="button"
+        class="ml-2 mb-1 mr-2 close-btn"
+        data-dismiss="toast"
+        aria-label="Close"
+      >
+        <span aria-hidden="true" close><strong>OK</strong></span>
+      </button>
+      <div class="toast-body error-toast-body">
+        PLEASE SELECT A COUNTRY ABOVE.
       </div>
-      
-      <div class="toast error-toast" id="errort" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
-        <button type="button" class="ml-2 mb-1 mr-2 close-btn" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true" close><strong>OK</strong></span>
-        </button>
-        <div class="toast-body error-toast-body">
-          PLEASE SELECT A COUNTRY ABOVE.
-        </div>
-      </div>
+    </div>
   </body>
 </html>
 <script type="text/javascript">
   $(document).ready(() => {
-    $('#cookiet').toast('show')
-    $('#errort').style.display = "none"
-  })
-
-
+    $("#cookiet").toast("show");
+    $("#errort").style.display = "none";
+  });
 
   var tminutes = "0:20"; //3 minutes
   var t = toSeconds(tminutes);
@@ -1002,16 +1047,12 @@
           .getElementById("data")
           .getElementsByTagName("tbody")[0];
 
-        // alert(myObj);
         $("#loading-image").hide();
 
         var i = 1;
 
-        // console.log(myObj);
-
         if (myObj.length == 0) {
-          console.log("toast")
-          $('.error-toast').toast('show')
+          $(".error-toast").toast("show");
         }
 
         for (x in myObj) {
@@ -1019,39 +1060,12 @@
             alert("No record found");
           } else if (myObj[x] != "") {
             if (i == 1) {
-              // document.getElementById("start").style.display = "block";
-
               document.getElementById("but").style.display = "none";
 
               $("#data tbody tr").remove();
             }
 
-            // // Insert a row in the table at the last row
-            // var newRow   = tableRef.insertRow();
-
-            // // Insert a cell in the row at index 0
-            // var newCell  = newRow.insertCell(0);
-
-            // var newText  = document.createTextNode(i );
-
-            // newCell.appendChild(newText);
-
-            // i = i +1;
-
             dictionary[myObj[x]] = 0;
-            // // Insert a cell in the row at index 1
-            // newCell  = newRow.insertCell(1);
-
-            // newText  = document.createTextNode(myObj[x]);
-
-            // newCell.appendChild(newText);
-
-            // // Insert a cell in the row at index 2
-            // newCell  = newRow.insertCell(2);
-
-            // newText  = document.createTextNode(0);
-
-            // newCell.appendChild(newText);
           }
         }
         call_starter();
@@ -1115,7 +1129,6 @@
     rows = table.rows;
 
     var j = rows.length - 1;
-    console.log(rows.length);
     for (i = 1; i < rows.length; i++) {
       //start by saying there should be no switching:
       /*Get the two elements you want to compare,
@@ -1131,7 +1144,6 @@
 
   function setRand() {
     var randN = getRndInteger(16, 20);
-    console.log(randN);
     clearInterval(interval);
 
     interval = setInterval(function () {
@@ -1159,7 +1171,6 @@
     query_count = query_count + 1;
     var d = googleurl;
 
-    console.log("size : " + myObj2.length);
     if (myObj2.length == 1) {
       call_stopper();
       return 0;
@@ -1172,13 +1183,7 @@
       } else {
         var index = myObj2.indexOf(item);
         myObj2.splice(index, 1);
-        console.log("Deleting : " + item);
       }
-
-      // if(item!="")
-      // {
-      //     break;
-      // }
     }
 
     var index = myObj2.indexOf(item);
@@ -1205,7 +1210,6 @@
         for (x in myObj) {
           var n = done.includes(myObj[x]);
           if (n == true) {
-            console.log("repeat " + myObj[x]);
             continue;
           } else {
             done.push(myObj[x]);
@@ -1225,8 +1229,6 @@
 
               var newText = document.createTextNode(i);
 
-
-
               newCell.appendChild(newText);
 
               i = i + 1;
@@ -1240,16 +1242,12 @@
               );
               link.target = "_blank";
               link.innerText = myObj[x];
-              link.style.color = "#ff005c"
+              link.style.color = "#ff005c";
               newCell.appendChild(link);
 
               //   // Insert a cell in the row at index 2
               newCell = newRow.insertCell(2);
-              //   console.log(dictionary);
-
-              //   console.log(dictionary[myObj[x]]);
               newText = document.createTextNode(dictionary[myObj[x]]);
-              console.log(newText)
 
               newCell.appendChild(newText);
             }
@@ -1262,13 +1260,6 @@
     };
 
     window.open(encodeURI("https://" + d + "search?query=" + query), "_blank");
-    // window.opener.focus();
-
-    // var timer = setInterval(function() {
-    // win.close();
-
-    // }, 16000);
-
     xmlhttp.open("GET", "call.php?url=" + d + "&query=" + query, true);
     xmlhttp.send();
   }
@@ -1308,11 +1299,7 @@
       }
       openMultipleTabs(urlsArray);
     } else {
-      // document.getElementById("start").style.display = "none";
-
       document.getElementById("stop").style.display = "block";
-      // document.getElementById("start").innerHTML = 'Searching ..';
-
       var randN = getRndInteger(16, 20);
       start_calling();
       interval = setInterval(function () {
@@ -1322,11 +1309,8 @@
   }
 
   function call_stopper() {
-    // 	document.getElementById("start").style.display = "block";
-
     document.getElementById("stop").style.display = "none";
     document.getElementById("but").style.display = "block";
-
     clearInterval(interval);
   }
 </script>

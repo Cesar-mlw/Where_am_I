@@ -84,6 +84,7 @@ body{
     display: flex;
     align-items: center;
     font-size: 0.8em;
+    line-height: 10.5;
 }
 
 
@@ -109,7 +110,7 @@ body{
     bottom: 9px;
     text-align: center;
     line-height: 12px;
-    box-shadow: -3px -3px 3px rgba(255, 255, 255, 0.6) inset, 3px 3px 3px rgba(0, 0, 0, 0.20) inset;
+    box-shadow: -3px -3px 3px rgba(255, 255, 255, 0.6), 3px 3px 3px rgba(0, 0, 0, 0.20);
 }  
 
 
@@ -138,8 +139,6 @@ body{
 }   
 
 .run-btn:hover{
-    box-shadow: none;
-    transition: box-shadow 0.3s ease-in-out;
     transition: border 0.3s ease-in-out;
 }
 
